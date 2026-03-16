@@ -1,145 +1,235 @@
-# paper-audit
+# paper-audit: The Adversary
 
-> *Seven rounds. Zero critical findings remaining.*
+<p align="center">
+  <img src="assets/banner.png" alt="The Adversary — Seven trials. Zero mercy. Better papers." width="100%">
+</p>
 
-A structured adversarial audit framework for research papers. Uses specialized AI agents in seven escalating rounds to find errors, inconsistencies, and overclaims before reviewers do.
+[![License: MPL 2.0](https://img.shields.io/badge/License-MPL_2.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
+[![Trials](https://img.shields.io/badge/trials-7-c0392b.svg)](#the-seven-trials)
+[![Battle Tested](https://img.shields.io/badge/findings-232_across_3_papers-f39c12.svg)](#the-body-count)
 
-**Battle-tested:** Developed during the audit of three research papers (232 findings across 7 rounds, 87 fixed, 0 CRITICAL or MAJOR remaining). Both papers shipped submission-ready.
+> *Can your paper go seven rounds?*
 
-## Why This Exists
+You've written the paper. The experiments work. The numbers look right. But do they *actually* match your raw data? Does the abstract still describe what the paper became? Did you cite the foundational reference you leaned on in Section 4?
 
-Most ML papers go to reviewers with numbers nobody double-checked, abstracts that don't match the body, and claims that outrun the evidence. Peer review catches some of this. A structured adversarial process catches more — and catches it before submission.
+**The Adversary** is a structured, agent-driven audit framework that finds what you missed — before Reviewer 2 does. It dispatches specialized AI agents round by round, each hunting a different class of error. You validate every finding against your actual data. What's real gets fixed. What's noise gets documented and dismissed.
 
-This framework runs seven rounds of increasingly focused scrutiny, each with specialized agents that look for different classes of error. Early rounds verify numbers. Later rounds check coherence, prose quality, and calibration of claims. A human hub validates every finding against raw data before accepting it.
+Seven trials. By the end, what's left standing is honest.
 
-## The Seven Rounds
+---
 
-| Round | Focus | Agents | Severity Threshold |
-|-------|-------|--------|--------------------|
-| 1 | **Factual Foundation** | Math accuracy (per paper), IP boundary | CRITICAL |
-| 2 | **Internal Consistency** | Abstract↔body, cross-refs, claim↔evidence | CRITICAL + MAJOR |
-| 3 | **Cross-Paper Coherence** | Narrative arc, terminology, forward/backward refs | CRITICAL + MAJOR |
-| 4 | **Figures + Reproducibility** | Figure↔text, reproducibility, missing visuals | MAJOR + MINOR |
-| 5 | **Writing Quality** | AI tic detection, prose quality, limitations honesty | MINOR + POLISH |
-| 6 | **Bibliography + Claims** | Citation completeness, related work gaps, claims calibration | MAJOR + MINOR |
-| 7 | **Final Integration** | Fresh read-through, cross-paper final, submission checklist | CRITICAL only |
+## How The Adversary Works
 
-Early rounds fix what's wrong. Late rounds fix what's imprecise.
+<p align="center">
+  <img src="assets/adversary-emblem.png" alt="The Adversary emblem" width="180">
+</p>
 
-## Quick Start
+Each trial sends agents after one layer of your paper. They report what they find. You — the hub — validate each finding against your raw data, accept or reject it, and fix what needs fixing. Then the next trial begins.
 
-### 1. Copy the templates
+```mermaid
+flowchart LR
+    R1["**I. CRUCIBLE**\nNumbers"]
+    R2["**II. MIRROR**\nConsistency"]
+    R3["**III. CHAIN**\nCoherence"]
+    R4["**IV. EYE**\nFigures"]
+    R5["**V. TONGUE**\nWriting"]
+    R6["**VI. SCALE**\nClaims"]
+    R7["**VII. GATE**\nFinal"]
+
+    R1 --> R2 --> R3 --> R4 --> R5 --> R6 --> R7
+
+    style R1 fill:#c0392b,color:#fff
+    style R2 fill:#e74c3c,color:#fff
+    style R3 fill:#d35400,color:#fff
+    style R4 fill:#e67e22,color:#fff
+    style R5 fill:#f39c12,color:#fff
+    style R6 fill:#8e44ad,color:#fff
+    style R7 fill:#2c3e50,color:#fff
+```
+
+**Early trials burn away what's wrong. Late trials sharpen what's imprecise.**
+
+Within each trial, agents work in parallel and you validate:
+
+```mermaid
+flowchart TD
+    H["The Hub\n(you)"] -->|dispatch| A1["Agent A"]
+    H -->|dispatch| A2["Agent B"]
+    H -->|dispatch| A3["Agent C"]
+    A1 -->|findings| V{"Hub\nValidation"}
+    A2 -->|findings| V
+    A3 -->|findings| V
+    V -->|accept| F["Fix & Track"]
+    V -->|reject| N["Document & Dismiss"]
+
+    style H fill:#2c3e50,color:#fff
+    style V fill:#c0392b,color:#fff
+    style F fill:#27ae60,color:#fff
+    style N fill:#7f8c8d,color:#fff
+```
+
+---
+
+## The Seven Trials
+
+| Trial | Name | What It Hunts | Severity |
+|:-----:|------|---------------|----------|
+| I | **The Crucible** | Wrong numbers, stale data, IP leaks | CRITICAL |
+| II | **The Mirror** | Abstract doesn't match body, phantom citations | CRITICAL + MAJOR |
+| III | **The Chain** | Broken citation chains, terminology drift across papers | CRITICAL + MAJOR |
+| IV | **The Eye** | Unreferenced figures, missing hyperparameters, reproducibility gaps | MAJOR + MINOR |
+| V | **The Tongue** | AI tics, missing transitions, unacknowledged limitations | MINOR + POLISH |
+| VI | **The Scale** | Orphan bib entries, overclaims, "universal" with n=6 | MAJOR + MINOR |
+| VII | **The Gate** | Last fresh-eyes pass, submission checklist | CRITICAL only |
+
+The Crucible burns away bad numbers. The Gate only opens for papers that are genuinely clean. You don't polish prose while the math is wrong.
+
+---
+
+## Getting Started
+
+### 1. Grab the templates
 
 ```bash
 git clone https://github.com/promptcrafted/paper-audit.git
 cp -r paper-audit/templates/ your-paper/audit/
 ```
 
-### 2. Set up the agent definitions
+### 2. Add the agent definitions
 
-Copy `.claude/agents/` into your project's `.claude/agents/` directory. These are [Claude Code](https://claude.ai/claude-code) agent definitions that can be spawned as sub-agents during the audit.
+Copy `.claude/agents/` into your project's `.claude/agents/` directory. These are [Claude Code](https://claude.ai/claude-code) agent definitions — specialized sub-agents you dispatch during the audit.
 
-### 3. Run round by round
+### 3. Enter the arena
 
-Each round follows the same pattern:
+Each trial follows the same rhythm:
 
-1. **Dispatch** — Launch 3-4 specialized agents in parallel
-2. **Validate** — Hub reads raw data to confirm/reject each finding
-3. **Fix** — Incorporate validated findings
-4. **Track** — Update FINDINGS_TRACKER.md and REWRITE_LOG.md
+1. **Dispatch** agents in parallel (they report only — they can't touch your files)
+2. **Validate** each finding against your raw data (this is the important part)
+3. **Fix** what's real
+4. **Track** everything in `FINDINGS_TRACKER.md` and `REWRITE_LOG.md`
 
-See [docs/METHODOLOGY.md](docs/METHODOLOGY.md) for the complete protocol.
+Seven times through. Each time, a different trial. Each time, a different layer of scrutiny.
 
-## Finding Format
+See **[docs/METHODOLOGY.md](docs/METHODOLOGY.md)** for the full protocol, and **[docs/SEVERITY_GUIDE.md](docs/SEVERITY_GUIDE.md)** for the classification system.
 
-Every finding follows a structured format for traceability:
+---
+
+## What a Finding Looks Like
 
 ```markdown
-### F-RR-NN: [Title]
-- Agent severity: CRITICAL / MAJOR / MINOR / POLISH
-- Location: Paper X, Section Y, Line Z
-- Finding: [What is wrong]
-- Evidence: [Raw data file + correct value]
-- Hub verdict: ACCEPTED — FIXED / ACCEPTED — NOTED / REJECTED
-- Fix: [What was changed]
+### F-01-08: Per-module ratio uses wrong source value
+- Agent severity: MAJOR
+- Location: Paper 3, Section 6.1, Line 934
+- Finding: q_proj ratio stated as 34,000:1 but source document shows 22,477:1
+- Evidence: DRAFT_SCALE_INVARIANCE_SECTION.md line 74
+- Hub verdict: ACCEPTED — FIXED
+- Fix: Section 6.1 rewritten with verified per-module values
 ```
 
-Severity definitions:
+Every finding gets a verdict. Every fix gets a justification. Nothing changes without a paper trail. The Adversary keeps score.
 
-| Level | Meaning | Action |
-|-------|---------|--------|
-| **CRITICAL** | Factually wrong numbers, IP exposure, broken references | Must fix before any further work |
-| **MAJOR** | Claims unsupported by evidence, inconsistencies between sections | Must fix before submission |
-| **MINOR** | Imprecise language, rounding differences, missing context | Fix if straightforward |
-| **POLISH** | Stylistic improvements, redundant phrasing | Fix at author's discretion |
+---
 
-## File Structure
+## Adapting the Arena
+
+The framework was forged for a multi-paper ML series, but it bends to fit:
+
+| Your situation | How to adapt |
+|---------------|--------------|
+| **Single paper** | Skip Trial III (The Chain) |
+| **No figures** | Skip figure agents in Trial IV; keep reproducibility |
+| **No code/data** | Skip IP boundary agent; keep everything else |
+| **Not ML** | Swap "hyperparameters" for your domain's equivalent |
+| **Tight deadline** | Run Trials I, II, and VI only — numbers, consistency, claims |
+
+The agents are markdown files with YAML frontmatter. Read one, change what doesn't fit, and you're ready.
+
+---
+
+## The Body Count
+
+This framework was developed and validated on three lattice topology research papers, audited simultaneously:
+
+| | |
+|---|---|
+| **Total findings** | 232 |
+| **Fixed** | 87 |
+| **CRITICAL at start** | 3 |
+| **CRITICAL remaining** | **0** |
+| **MAJOR remaining** | **0** |
+| **False positive rate** | 0% (zero rejected findings) |
+| **Papers audited** | 3 (simultaneously) |
+| **Agents deployed** | ~25 |
+
+The complete sanitized audit trail is in **[examples/rhombic/](examples/rhombic/)** — all seven trials of hub validation, the full findings tracker, and the rewrite log showing every change and why.
+
+### What The Adversary caught that we would have missed
+
+- **Stale experimental data** — six MAJOR findings traced to in-progress values never updated after experiments finished
+- **An IP boundary violation** — proprietary values exposed in a graph construction example
+- **A phantom citation** — Paper 3 cited Paper 2 for content Paper 2 never contained
+- **"Universal" with n=6** — claims calibrated down to match evidence strength
+- **Three unacknowledged limitations** — single seed, single-scale ablation, untuned controller parameters
+
+---
+
+## The Code
 
 ```
-your-paper/audit/
-├── FINDINGS_TRACKER.md          # Running log across all rounds
-├── REWRITE_LOG.md               # What changed and why
-├── round-1/
-│   ├── agent-1A-math-p3.md      # Agent findings
-│   ├── agent-1B-math-p2.md
-│   ├── agent-1C-math-p1.md
-│   ├── agent-1D-ip-boundary.md
-│   └── hub-validation.md        # Hub confirmation/rejection
-├── round-2/
-│   └── ...
-└── round-7/
-    └── hub-validation.md
+paper-audit/
+├── README.md                           # You are here
+├── CLAUDE.md                           # Project identity for Claude Code
+├── LICENSE                             # MPL-2.0
+├── assets/
+│   ├── banner.png                     # The Adversary banner
+│   └── adversary-emblem.png           # The emblem
+├── docs/
+│   ├── METHODOLOGY.md                  # Complete 7-trial protocol
+│   └── SEVERITY_GUIDE.md              # CRITICAL > MAJOR > MINOR > POLISH
+├── templates/
+│   ├── FINDINGS_TRACKER.md            # Copy into your audit/
+│   ├── REWRITE_LOG.md                 # Copy into your audit/
+│   └── hub-validation.md             # Copy into each trial/
+├── .claude/agents/
+│   ├── math-accuracy.md               # Trial I: number verification
+│   ├── ip-boundary.md                 # Trial I: proprietary data check
+│   ├── abstract-body.md               # Trial II: abstract-body alignment
+│   ├── cross-refs.md                  # Trial II: citations and references
+│   ├── claim-evidence.md              # Trial II: claims vs evidence
+│   ├── narrative-arc.md               # Trial III: cross-paper story
+│   ├── figure-text.md                 # Trial IV: figure-text consistency
+│   ├── reproducibility.md             # Trial IV: can someone replicate this?
+│   ├── ai-tic-detector.md             # Trial V: AI verbal patterns
+│   ├── claims-calibration.md          # Trial VI: do claims match evidence?
+│   └── submission-checklist.md        # Trial VII: final checklist
+└── examples/rhombic/                   # Real audit trail (sanitized)
+    ├── round-1 through round-7         # Hub validation for each trial
+    ├── FINDINGS_TRACKER.md            # 232 findings, fully dispositioned
+    └── REWRITE_LOG.md                 # 87 changes, all justified
 ```
 
-## Agent Architecture
+---
 
-Each round dispatches 3-4 specialized agents. Agents are adversarial — their job is to find problems, not to praise the paper. The hub is the judge — it validates findings against raw data and accepts or rejects each one.
+## The Philosophy
 
-**Agents cannot modify files.** They report findings. The hub decides what to act on. This separation prevents agents from "fixing" things by introducing new errors.
+This isn't about making papers perfect. It's about making them *honest*.
 
-**Agents run in parallel within a round.** Rounds run sequentially. Each round's fixes are in place before the next round begins.
-
-See [.claude/agents/](.claude/agents/) for the full set of agent definitions.
-
-## Adapting to Your Paper
-
-The framework is designed for multi-paper research projects but works for single papers too:
-
-- **Single paper:** Skip Round 3 (cross-paper coherence). Agents 1A and 7A handle the single paper.
-- **No figures:** Skip Round 4 agents 4A and 4C. Keep 4B (reproducibility).
-- **No code:** Skip IP boundary agent (1D). Keep everything else.
-- **Non-ML papers:** The methodology generalizes. Swap "hyperparameters" for your domain's equivalent in the reproducibility check.
-
-## Results From the Field
-
-The framework was developed and validated on three lattice topology papers:
-
-| Metric | Value |
-|--------|-------|
-| Total findings | 232 |
-| Findings fixed | 87 |
-| CRITICAL findings at Round 1 | 4 |
-| CRITICAL findings remaining | **0** |
-| MAJOR findings remaining | **0** |
-| Rounds | 7 |
-| Agents deployed | ~25 |
-| Papers audited | 3 (simultaneously) |
-
-See [examples/rhombic/](examples/rhombic/) for the complete audit trail.
-
-## Philosophy
-
-- **Numbers first.** Verify every number against raw data before anything else.
-- **The hub decides.** Agent findings are proposals, not verdicts.
-- **Severity escalation.** Don't polish prose while numbers are wrong.
-- **Sparse findings are data.** A round with zero findings means the paper is clean at that level, not that the agents failed.
+- **Numbers first.** Everything else waits until the math is right.
+- **The hub decides.** Agents find things. You decide what matters.
+- **Sparse findings are data.** A clean trial means the paper is clean at that layer.
 - **Fix, don't defend.** When a finding is valid, fix it. Don't argue with your own audit.
+- **Every change has a reason.** If it's not in the rewrite log, it didn't happen.
+
+---
 
 ## License
 
-[MPL-2.0](LICENSE) — Use freely. Modifications to framework files shared back to the commons.
+[MPL-2.0](LICENSE) — Use freely. Modifications to framework files shared back to the commons. Your paper content stays yours.
 
-## Built by [Promptcrafted](https://promptcrafted.com)
+---
 
-Developed as part of the [rhombic](https://github.com/promptcrafted/rhombic) research program.
-*The scrutiny is the argument. The findings are the evidence.*
+<p align="center">
+  Built by <a href="https://promptcrafted.com"><strong>Promptcrafted</strong></a><br>
+  <em>The toughest reviewer you'll ever thank.</em><br><br>
+  Developed as part of the <a href="https://github.com/promptcrafted/rhombic">rhombic</a> research program.
+</p>

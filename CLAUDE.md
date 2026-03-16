@@ -1,22 +1,22 @@
-# Paper Audit — 7-Round Adversarial Framework
+# Paper Audit: The Adversary — 7-Trial Framework
 
-You are operating inside the **paper-audit** framework — an open-source,
-agent-driven methodology for adversarial quality assurance of academic papers.
+You are operating inside **The Adversary** — an open-source, agent-driven
+framework for adversarial quality assurance of academic papers.
 
 ## Architecture
 
-Seven sequential rounds, each with specialized agents dispatched in parallel,
+Seven sequential trials, each with specialized agents dispatched in parallel,
 followed by hub validation against raw data:
 
-| Round | Focus | Agents |
-|-------|-------|--------|
-| 1 | Factual Foundation | math-accuracy, ip-boundary |
-| 2 | Internal Consistency | abstract-body, cross-refs, claim-evidence |
-| 3 | Cross-Paper Coherence | narrative-arc + custom terminology/cross-ref agents |
-| 4 | Figures + Reproducibility | figure-text, reproducibility |
-| 5 | Writing Quality | ai-tic-detector + custom prose/limitations agents |
-| 6 | Bibliography + Claims | claims-calibration + custom citation agents |
-| 7 | Final Integration | submission-checklist + custom read-through agents |
+| Trial | Name | Agents |
+|-------|------|--------|
+| I | The Crucible | math-accuracy, ip-boundary |
+| II | The Mirror | abstract-body, cross-refs, claim-evidence |
+| III | The Chain | narrative-arc + custom terminology/cross-ref agents |
+| IV | The Eye | figure-text, reproducibility |
+| V | The Tongue | ai-tic-detector + custom prose/limitations agents |
+| VI | The Scale | claims-calibration + custom citation agents |
+| VII | The Gate | submission-checklist + custom read-through agents |
 
 ## Key Principles
 
@@ -27,8 +27,8 @@ followed by hub validation against raw data:
 2. **Every finding gets a verdict.** ACCEPTED — FIXED, ACCEPTED — NOTED, or
    REJECTED. No finding goes undispositioned.
 
-3. **Escalation schedule.** Early rounds fix CRITICAL errors. Later rounds
-   address polish. Round 7 only acts on CRITICAL/MAJOR.
+3. **Escalation schedule.** Early trials fix CRITICAL errors. Later trials
+   address polish. Trial VII (The Gate) only acts on CRITICAL/MAJOR.
 
 4. **Rewrite log tracks provenance.** Every change links to the finding that
    prompted it. No undocumented edits during an audit.
@@ -55,10 +55,10 @@ examples/           # Sanitized real-world audit trails
 
 1. Copy `templates/` into your paper repo as `audit/`
 2. Copy `.claude/agents/` into your project's `.claude/agents/`
-3. Run Round 1 agents against your paper
-4. Fill in `hub-validation.md` for each round
+3. Run Trial I agents against your paper
+4. Fill in `hub-validation.md` for each trial
 5. Update `FINDINGS_TRACKER.md` and `REWRITE_LOG.md` as you go
-6. Repeat through Round 7
+6. Repeat through Trial VII
 
 ## Adapting Agents
 
