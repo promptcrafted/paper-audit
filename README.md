@@ -91,7 +91,7 @@ The Crucible burns away bad numbers. The Gate only opens for papers that are gen
 ### 1. Grab the templates
 
 ```bash
-git clone https://github.com/promptcrafted/paper-audit.git
+git clone https://github.com/tasumermaf/the-adversary.git
 cp -r paper-audit/templates/ your-paper/audit/
 ```
 
@@ -229,7 +229,7 @@ This isn't about making papers perfect. It's about making them *honest*.
 ---
 
 <p align="center">
-  Built by <a href="https://promptcrafted.com"><strong>Promptcrafted</strong></a><br>
+  Built by <a href="https://tasumermaf.com"><strong>TASUMER MAF</strong></a><br>
   <em>The toughest reviewer you'll ever thank.</em><br><br>
-  Developed as part of the <a href="https://github.com/promptcrafted/rhombic">rhombic</a> research program.
+  Developed as part of the <a href="https://github.com/tasumermaf/rhombic">rhombic</a> research program.
 </p>
